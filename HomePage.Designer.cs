@@ -28,26 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HomePage));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.openFile = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.playButton = new System.Windows.Forms.ToolStripMenuItem();
             this.settings = new System.Windows.Forms.ToolStripMenuItem();
-            this.mediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
             this.fileName = new System.Windows.Forms.Label();
             this.yuvFormatLabel = new System.Windows.Forms.Label();
             this.frameSizeLabel = new System.Windows.Forms.Label();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mediaPlayer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
-            this.loadFile,
+            this.playButton,
             this.settings});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -77,11 +77,12 @@
             this.saveFile.Size = new System.Drawing.Size(180, 22);
             this.saveFile.Text = "Save";
             // 
-            // loadFile
+            // playButton
             // 
-            this.loadFile.Name = "loadFile";
-            this.loadFile.Size = new System.Drawing.Size(41, 20);
-            this.loadFile.Text = "Play";
+            this.playButton.Name = "playButton";
+            this.playButton.Size = new System.Drawing.Size(41, 20);
+            this.playButton.Text = "Play";
+            this.playButton.Click += new System.EventHandler(this.playButton_Click);
             // 
             // settings
             // 
@@ -89,15 +90,6 @@
             this.settings.Size = new System.Drawing.Size(61, 20);
             this.settings.Text = "Settings";
             this.settings.Click += new System.EventHandler(this.settings_Click);
-            // 
-            // mediaPlayer
-            // 
-            this.mediaPlayer.Enabled = true;
-            this.mediaPlayer.Location = new System.Drawing.Point(12, 63);
-            this.mediaPlayer.Name = "mediaPlayer";
-            this.mediaPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("mediaPlayer.OcxState")));
-            this.mediaPlayer.Size = new System.Drawing.Size(782, 442);
-            this.mediaPlayer.TabIndex = 1;
             // 
             // fileName
             // 
@@ -128,15 +120,36 @@
             this.frameSizeLabel.Text = "176x144";
             this.frameSizeLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // pictureBox
+            // 
+            this.pictureBox.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.pictureBox.Location = new System.Drawing.Point(12, 61);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(782, 444);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox.TabIndex = 5;
+            this.pictureBox.TabStop = false;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(357, 264);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(89, 14);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Lütfen bekleyin...";
+            this.label1.Visible = false;
+            // 
             // HomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(806, 517);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.frameSizeLabel);
             this.Controls.Add(this.yuvFormatLabel);
             this.Controls.Add(this.fileName);
-            this.Controls.Add(this.mediaPlayer);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "HomePage";
@@ -144,7 +157,7 @@
             this.Text = "Home Page";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mediaPlayer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,12 +169,13 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem openFile;
         private System.Windows.Forms.ToolStripMenuItem saveFile;
-        private System.Windows.Forms.ToolStripMenuItem loadFile;
+        private System.Windows.Forms.ToolStripMenuItem playButton;
         private System.Windows.Forms.ToolStripMenuItem settings;
-        private AxWMPLib.AxWindowsMediaPlayer mediaPlayer;
         private System.Windows.Forms.Label fileName;
         private System.Windows.Forms.Label yuvFormatLabel;
         private System.Windows.Forms.Label frameSizeLabel;
+        private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.Label label1;
     }
 }
 

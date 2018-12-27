@@ -54,7 +54,7 @@ namespace YUVDecoder
             sizeCB.ValueMember = "Item2";
             sizeCB.DataSource = sizeDataSource;
             sizeCB.SelectedValue = FileInfo.sizeType;
-            sizeWidht.Value = FileInfo.weight;
+            sizeWidht.Value = FileInfo.width;
             sizeHeight.Value = FileInfo.height;
         }
 
@@ -83,18 +83,18 @@ namespace YUVDecoder
                     {
                         return;
                     }
-                    FileInfo.weight = (int) sizeWidht.Value;
+                    FileInfo.width = (int) sizeWidht.Value;
                     FileInfo.height = (int) sizeHeight.Value;
                     break;
                 default:
                     FileInfo.sizeType = sizeCB.SelectedIndex;
-                    FileInfo.weight = Convert.ToInt32(((List<Tuple<string,int>>)sizeCB.DataSource)[sizeCB.SelectedIndex].Item1.Split('(')[1].Split(',')[0]);
+                    FileInfo.width = Convert.ToInt32(((List<Tuple<string,int>>)sizeCB.DataSource)[sizeCB.SelectedIndex].Item1.Split('(')[1].Split(',')[0]);
                     FileInfo.height = Convert.ToInt32(((List<Tuple<string, int>>)sizeCB.DataSource)[sizeCB.SelectedIndex].Item1.Split('(')[1].Split(',')[1].Split(')')[0]);
                     break;
             }
 
             yuvFormat = ((List<Tuple<string, int>>) yuvCB.DataSource)[yuvCB.SelectedIndex].Item1;
-            frameSize = $"{FileInfo.weight}x{FileInfo.height}";
+            frameSize = $"{FileInfo.width}x{FileInfo.height}";
             this.DialogResult = DialogResult.OK;
             this.Hide();
         }

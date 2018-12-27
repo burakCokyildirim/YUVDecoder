@@ -11,7 +11,7 @@ namespace YUVDecoder
         public static yuvType yuv = yuvType.y420;
         public static int sizeType = 1;
         public static int height = 144;
-        public static int weight = 176;
+        public static int width = 176;
 
         public enum yuvType
         {
