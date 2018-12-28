@@ -17,7 +17,6 @@ namespace YUVDecoder
         public Settings()
         {
             InitializeComponent();
-
             loadItems();
         }
 

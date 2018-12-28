@@ -73,12 +73,15 @@
             // 
             // saveFile
             // 
+            this.saveFile.Enabled = false;
             this.saveFile.Name = "saveFile";
             this.saveFile.Size = new System.Drawing.Size(180, 22);
             this.saveFile.Text = "Save";
+            this.saveFile.Click += new System.EventHandler(this.saveFile_Click);
             // 
             // playButton
             // 
+            this.playButton.Enabled = false;
             this.playButton.Name = "playButton";
             this.playButton.Size = new System.Drawing.Size(41, 20);
             this.playButton.Text = "Play";

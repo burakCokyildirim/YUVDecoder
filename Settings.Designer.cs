@@ -133,20 +133,6 @@
             // 
             this.sizeCB.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.sizeCB.FormattingEnabled = true;
-            this.sizeCB.Items.AddRange(new object[] {
-            "QCIF              (176,144)",
-            "QVGA            (320, 240)",
-            "WQVGA        (416, 240)",
-            "CIF                 (352, 288)",
-            "VGA               (640, 880)",
-            "WVGA           (832, 480)",
-            "4CIF               (704, 576)",
-            "ITU R.BT601  (720, 576)",
-            "720i/p            (1280, 720)",
-            "1080i/p          (1920, 720)",
-            "4k                   (3840, 2160)",
-            "XGA               (1024, 768)",
-            "XGA+            (1280, 960)"});
             this.sizeCB.Location = new System.Drawing.Point(111, 77);
             this.sizeCB.Name = "sizeCB";
             this.sizeCB.Size = new System.Drawing.Size(165, 24);

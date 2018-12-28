@@ -15,10 +15,10 @@ namespace YUVDecoder
 {
     public partial class HomePage : Form
     {
-        byte[] buffer = null;
-        MemoryStream memory = null;
-        static byte[][] frames = null;
-        private static Bitmap[] bitmaps = null;
+        byte[] buffer;
+        MemoryStream memory;
+        static byte[][] frames;
+        private static Bitmap[] bitmaps;
 
         public HomePage()
         {
@@ -36,8 +36,8 @@ namespace YUVDecoder
                 buffer = File.ReadAllBytes(dialog.FileName);
                 memory = new MemoryStream(buffer);
                 parseBuffer();
-                
-                Bitmap a = c420(frames[0], FileInfo.width, FileInfo.height);
+
+                Bitmap firstFrame = renderFrame(frames[0], FileInfo.width, FileInfo.height);
                 bitmaps = new Bitmap[frames.Length];
                 menuStrip1.Enabled = false;
                 label1.Visible = true;
@@ -45,55 +45,37 @@ namespace YUVDecoder
                 {
                     for (int i = 0; i < frames.Length; i++)
                     {
-                        bitmaps[i] = c420(frames[i], FileInfo.width, FileInfo.height);
+                        bitmaps[i] = renderFrame(frames[i], FileInfo.width, FileInfo.height);
                     }
                 });
                 label1.Visible = false;
                 menuStrip1.Enabled = true;
-                pictureBox.Image = a;
+                saveFile.Enabled = true;
+                playButton.Enabled = true;
+                pictureBox.Image = firstFrame;
             }
         }
 
-        static Bitmap c420(byte[] yuv, int width, int height)
+        private static Bitmap renderFrame(byte[] yuv, int width, int height)
         {
-            double[,] converter = new double[3, 3] { { 1, 0, 1.4022 }, { 1, -0.3456, -0.7145 }, { 1, 1.771, 0 } };
-
-            byte[] rgb = new byte[frames[0].Length * 3];
-
-            int uIndex = width * height;
-            int vIndex = uIndex + ((width * height) >> 2);
-            int gIndex = width * height;
-            int bIndex = gIndex * 2;
-
-            int temp = 0;
-            
-            Bitmap bm = new Bitmap(width, height);
-
-            int r = 0;
-            int g = 0;
-            int b = 0;
-
+            Bitmap bitmap = new Bitmap(width, height);
 
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
+                    int index = y * width + x;
 
-                    temp = (int)(yuv[y * width + x] + (yuv[vIndex + (y / 2) * (width / 2) + x / 2] - 128) * converter[0, 2]);
-                    rgb[y * width + x] = clip(temp);
-                    
-                    temp = (int)(yuv[y * width + x] + (yuv[uIndex + (y / 2) * (width / 2) + x / 2] - 128) * converter[1, 1] + (yuv[vIndex + (y / 2) * (width / 2) + x / 2] - 128) * converter[1, 2]);
-                    rgb[gIndex + y * width + x] = clip(temp);
+                    byte value = clip(yuv[index]);
 
-                    temp = (int)(yuv[y * width + x] + (yuv[uIndex + (y / 2) * (width / 2) + x / 2] - 128) * converter[2, 1]);
-                    rgb[bIndex + y * width + x] = clip(temp);
-                    Color c = Color.FromArgb(rgb[y * width + x], rgb[gIndex + y * width + x], rgb[bIndex + y * width + x]);
-                    bm.SetPixel(x, y, c);
+                    Color c = Color.FromArgb(value, value, value);
+
+                    bitmap.SetPixel(x, y, c);
                 }
             }
-            return bm;
-
+            return bitmap;
         }
+
         private static byte clip(float input)
         {
             if (input < 0) input = 0;
@@ -117,7 +99,7 @@ namespace YUVDecoder
                     break;
             }
             double frameCount = buffer.Length / (FileInfo.width * FileInfo.height * yuvRate);
-            int frameLenght = (int) (buffer.Length / frameCount);
+            int frameLenght = (int)(buffer.Length / frameCount);
             frames = new byte[(int)frameCount][];
             for (int i = 0; i < (int)frameCount; i++)
             {
@@ -145,12 +127,40 @@ namespace YUVDecoder
 
         private async void playButton_Click(object sender, EventArgs e)
         {
+            menuStrip1.Enabled = false;
+
             for (int i = 0; i < bitmaps.Length; i++)
             {
                 pictureBox.Image = bitmaps[i];
                 await Task.Delay(20);
             }
+
+            menuStrip1.Enabled = true;
+        }
+
+        private void saveFile_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                string path = dialog.SelectedPath + "\\";
+                saveBitmaps(path);
+            }
+        }
+
+        private async void saveBitmaps(string path)
+        {
+            
+            label1.Visible = true;
+            menuStrip1.Enabled = false;
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < bitmaps.Length; i++)
+                    bitmaps[i].Save(path + $"{fileName.Text}_" + (i + 1) + ".bmp", ImageFormat.Bmp);
+            });
+            label1.Visible = false;
+            menuStrip1.Enabled = true;
+            MessageBox.Show(this, "Kaydedildi.");
         }
     }
 }
-
