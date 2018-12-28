@@ -25,34 +25,32 @@ namespace YUVDecoder
             InitializeComponent();
         }
 
-        private async void openFile_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "YUV Files (*.yuv)|*.yuv";
-            dialog.ShowDialog();
-            if (File.Exists(dialog.FileName))
-            {
-                fileName.Text = dialog.SafeFileName;
-                buffer = File.ReadAllBytes(dialog.FileName);
-                memory = new MemoryStream(buffer);
-                parseBuffer();
+        /// Functions:
 
-                Bitmap firstFrame = renderFrame(frames[0], FileInfo.width, FileInfo.height);
-                bitmaps = new Bitmap[frames.Length];
-                menuStrip1.Enabled = false;
-                label1.Visible = true;
-                await Task.Run(() =>
-                {
-                    for (int i = 0; i < frames.Length; i++)
-                    {
-                        bitmaps[i] = renderFrame(frames[i], FileInfo.width, FileInfo.height);
-                    }
-                });
-                label1.Visible = false;
-                menuStrip1.Enabled = true;
-                saveFile.Enabled = true;
-                playButton.Enabled = true;
-                pictureBox.Image = firstFrame;
+        #region Functions
+
+        private void parseBuffer()
+        {
+            double yuvRate = 3.0 / 2.0;
+            switch (FileInfo.yuv)
+            {
+                case FileInfo.yuvType.y420:
+                    yuvRate = 3.0 / 2.0;
+                    break;
+                case FileInfo.yuvType.y422:
+                    yuvRate = 2.0;
+                    break;
+                case FileInfo.yuvType.y444:
+                    yuvRate = 3.0;
+                    break;
+            }
+            double frameCount = buffer.Length / (FileInfo.width * FileInfo.height * yuvRate);
+            int frameLenght = (int)(buffer.Length / frameCount);
+            frames = new byte[(int)frameCount][];
+            for (int i = 0; i < (int)frameCount; i++)
+            {
+                frames[i] = new byte[frameLenght];
+                memory.Read(frames[i], 0, frameLenght);
             }
         }
 
@@ -83,28 +81,55 @@ namespace YUVDecoder
             return (byte)Math.Abs(input);
         }
 
-        private void parseBuffer()
+        private async void saveBitmaps(string path)
         {
-            double yuvRate = 3.0 / 2.0;
-            switch (FileInfo.yuv)
+            
+            label1.Visible = true;
+            menuStrip1.Enabled = false;
+            await Task.Run(() =>
             {
-                case FileInfo.yuvType.y420:
-                    yuvRate = 3.0 / 2.0;
-                    break;
-                case FileInfo.yuvType.y422:
-                    yuvRate = 2.0;
-                    break;
-                case FileInfo.yuvType.y444:
-                    yuvRate = 3.0;
-                    break;
-            }
-            double frameCount = buffer.Length / (FileInfo.width * FileInfo.height * yuvRate);
-            int frameLenght = (int)(buffer.Length / frameCount);
-            frames = new byte[(int)frameCount][];
-            for (int i = 0; i < (int)frameCount; i++)
+                for (int i = 0; i < bitmaps.Length; i++)
+                    bitmaps[i].Save(path + $"{fileName.Text}_" + (i + 1) + ".bmp", ImageFormat.Bmp);
+            });
+            label1.Visible = false;
+            menuStrip1.Enabled = true;
+            MessageBox.Show(this, "Kaydedildi.");
+        }
+
+        #endregion
+
+        /// Buttons Click Events:
+
+        #region Buttons Clicks
+
+        private async void openFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "YUV Files (*.yuv)|*.yuv";
+            dialog.ShowDialog();
+            if (File.Exists(dialog.FileName))
             {
-                frames[i] = new byte[frameLenght];
-                memory.Read(frames[i], 0, frameLenght);
+                fileName.Text = dialog.SafeFileName;
+                buffer = File.ReadAllBytes(dialog.FileName);
+                memory = new MemoryStream(buffer);
+                parseBuffer();
+
+                Bitmap firstFrame = renderFrame(frames[0], FileInfo.width, FileInfo.height);
+                bitmaps = new Bitmap[frames.Length];
+                menuStrip1.Enabled = false;
+                label1.Visible = true;
+                await Task.Run(() =>
+                {
+                    Parallel.For(0, frames.Length,
+                        i => {
+                            bitmaps[i] = renderFrame(frames[i], FileInfo.width, FileInfo.height);
+                        });
+                });
+                label1.Visible = false;
+                menuStrip1.Enabled = true;
+                saveFile.Enabled = true;
+                playButton.Enabled = true;
+                pictureBox.Image = firstFrame;
             }
         }
 
@@ -135,6 +160,7 @@ namespace YUVDecoder
                 await Task.Delay(20);
             }
 
+            pictureBox.Image = bitmaps[0];
             menuStrip1.Enabled = true;
         }
 
@@ -148,19 +174,7 @@ namespace YUVDecoder
             }
         }
 
-        private async void saveBitmaps(string path)
-        {
-            
-            label1.Visible = true;
-            menuStrip1.Enabled = false;
-            await Task.Run(() =>
-            {
-                for (int i = 0; i < bitmaps.Length; i++)
-                    bitmaps[i].Save(path + $"{fileName.Text}_" + (i + 1) + ".bmp", ImageFormat.Bmp);
-            });
-            label1.Visible = false;
-            menuStrip1.Enabled = true;
-            MessageBox.Show(this, "Kaydedildi.");
-        }
+        #endregion
+
     }
 }

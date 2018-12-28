@@ -67,7 +67,7 @@
             // openFile
             // 
             this.openFile.Name = "openFile";
-            this.openFile.Size = new System.Drawing.Size(180, 22);
+            this.openFile.Size = new System.Drawing.Size(103, 22);
             this.openFile.Text = "Open";
             this.openFile.Click += new System.EventHandler(this.openFile_Click);
             // 
@@ -75,7 +75,7 @@
             // 
             this.saveFile.Enabled = false;
             this.saveFile.Name = "saveFile";
-            this.saveFile.Size = new System.Drawing.Size(180, 22);
+            this.saveFile.Size = new System.Drawing.Size(103, 22);
             this.saveFile.Text = "Save";
             this.saveFile.Click += new System.EventHandler(this.saveFile_Click);
             // 
@@ -136,11 +136,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(357, 264);
+            this.label1.Font = new System.Drawing.Font("Arial", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label1.Location = new System.Drawing.Point(338, 272);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 14);
+            this.label1.Size = new System.Drawing.Size(130, 23);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Lütfen bekleyin...";
+            this.label1.Text = "Please wait...";
             this.label1.Visible = false;
             // 
             // HomePage

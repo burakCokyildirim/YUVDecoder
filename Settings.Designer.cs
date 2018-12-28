@@ -127,7 +127,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 16);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Widht:";
+            this.label1.Text = "Width:";
             // 
             // sizeCB
             // 

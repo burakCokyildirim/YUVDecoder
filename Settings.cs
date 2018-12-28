@@ -14,11 +14,16 @@ namespace YUVDecoder
     {
         public string  yuvFormat = "";
         public string frameSize = "";
+
         public Settings()
         {
             InitializeComponent();
             loadItems();
         }
+
+        /// Functions:
+
+        #region Functions
 
         private void loadItems()
         {
@@ -57,6 +62,39 @@ namespace YUVDecoder
             sizeHeight.Value = FileInfo.height;
         }
 
+        #endregion
+
+        /// Events:
+
+        #region Events
+
+        private void sizeCB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (sizeCB.SelectedIndex)
+            {
+                case 0:
+                    sizeWidht.Value = 0;
+                    sizeHeight.Value = 0;
+                    break;
+                default:
+                    sizeWidht.Value = Convert.ToInt32(((List<Tuple<string, int>>)sizeCB.DataSource)[sizeCB.SelectedIndex].Item1.Split('(')[1].Split(',')[0]);
+                    sizeHeight.Value = Convert.ToInt32(((List<Tuple<string, int>>)sizeCB.DataSource)[sizeCB.SelectedIndex].Item1.Split('(')[1].Split(',')[1].Split(')')[0]);
+                    break;
+            }
+        }
+
+        #endregion
+
+        /// Buttons Click Events:
+
+        #region Buttons Clicks
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            Hide();
+        }
+
         private void saveButton_Click(object sender, EventArgs e)
         {
             switch (yuvCB.SelectedIndex)
@@ -82,41 +120,23 @@ namespace YUVDecoder
                     {
                         return;
                     }
-                    FileInfo.width = (int) sizeWidht.Value;
-                    FileInfo.height = (int) sizeHeight.Value;
+                    FileInfo.width = (int)sizeWidht.Value;
+                    FileInfo.height = (int)sizeHeight.Value;
                     break;
                 default:
                     FileInfo.sizeType = sizeCB.SelectedIndex;
-                    FileInfo.width = Convert.ToInt32(((List<Tuple<string,int>>)sizeCB.DataSource)[sizeCB.SelectedIndex].Item1.Split('(')[1].Split(',')[0]);
+                    FileInfo.width = Convert.ToInt32(((List<Tuple<string, int>>)sizeCB.DataSource)[sizeCB.SelectedIndex].Item1.Split('(')[1].Split(',')[0]);
                     FileInfo.height = Convert.ToInt32(((List<Tuple<string, int>>)sizeCB.DataSource)[sizeCB.SelectedIndex].Item1.Split('(')[1].Split(',')[1].Split(')')[0]);
                     break;
             }
 
-            yuvFormat = ((List<Tuple<string, int>>) yuvCB.DataSource)[yuvCB.SelectedIndex].Item1;
+            yuvFormat = ((List<Tuple<string, int>>)yuvCB.DataSource)[yuvCB.SelectedIndex].Item1;
             frameSize = $"{FileInfo.width}x{FileInfo.height}";
             this.DialogResult = DialogResult.OK;
             this.Hide();
         }
 
-        private void sizeCB_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch (sizeCB.SelectedIndex)
-            {
-                case 0:
-                    sizeWidht.Value = 0;
-                    sizeHeight.Value = 0;
-                    break;
-                default:
-                    sizeWidht.Value = Convert.ToInt32(((List<Tuple<string, int>>)sizeCB.DataSource)[sizeCB.SelectedIndex].Item1.Split('(')[1].Split(',')[0]);
-                    sizeHeight.Value = Convert.ToInt32(((List<Tuple<string, int>>)sizeCB.DataSource)[sizeCB.SelectedIndex].Item1.Split('(')[1].Split(',')[1].Split(')')[0]);
-                    break;
-            }
-        }
+        #endregion
 
-        private void cancelButton_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            Hide();
-        }
     }
 }
